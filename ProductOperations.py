@@ -12,7 +12,8 @@ class Product:
             self.create_db_file()
         with open('products.json', 'r', encoding='utf-8') as f:
             file = json.load(f)
-        self.product = file
+        # self.product = file
+        return file
         
     def create_db_file(self):
         # check if products.json available before calling the function.
@@ -22,13 +23,16 @@ class Product:
             json.dump(products, f, ensure_ascii=False, indent=4)
             
     def update_json(self):
+        
         with open('products.json', 'w', encoding='utf-8') as f:
             json.dump(self.product, f, ensure_ascii=False, indent=4)
+        
         
     def add_new_bead(self, number_of_piece, total_price, bead_name):
         # calculate unit price,
         try:
             unit_price = total_price / number_of_piece
+            unit_price = "{:.2f}".format(unit_price)
         except:
             raise Exception("Error occured while calculating unit price, please check inputs.")
         # save item into json file with all information
@@ -43,7 +47,7 @@ class Product:
         self.product['beads'][bead_name] = info
         self.update_json()
             
-    def add_new_necklace(self, item_list, necklace_name):
+    def add_new_necklace(self, item_list, necklace_name, satis_fiyati):
         # item_list = bean names: # of piece,
         necklaces = self.product['products']
         if necklace_name in necklaces:
@@ -51,13 +55,20 @@ class Product:
         
         beads = self.product['beads']
         product_price = 0
+        
         for item, piece in item_list.items():
-            item_price = beads[item]['Unit_Price'] * piece
+            unit_price = float(beads[item]['Unit_Price'])
+            item_price = unit_price * float(piece)
             product_price += item_price
         necklace = {'Item_Name': necklace_name,
-                    'Price': product_price,
-                    'Beads': item_list}
+                    'Urunun_maliyeti': product_price,
+                    'Beads': item_list,
+                    'Satis_Fiyati': satis_fiyati}
         
         self.product['products'][necklace_name] = necklace
-        self.update_json()   
+        self.update_json()
     
+        
+# a = Product()
+# l = {'inci': 2000.0, 'Mavi tas': 50.0, 'yuy': 15.0}
+# a.add_new_necklace(l, 'deneme 123')

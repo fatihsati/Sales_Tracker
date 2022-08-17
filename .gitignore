@@ -3,3 +3,4 @@ SaleOperations.py
 deneme.py
 products.json
 sales.json
+__pycache__/
