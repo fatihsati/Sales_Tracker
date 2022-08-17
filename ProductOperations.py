@@ -47,23 +47,26 @@ class Product:
         self.product['beads'][bead_name] = info
         self.update_json()
             
-    def add_new_necklace(self, item_list, necklace_name, satis_fiyati):
+    def add_new_necklace(self, item_list, necklace_name, satis_fiyati, boncuk_maliyet, toplam_maliyet, kazanc):
         # item_list = bean names: # of piece,
         necklaces = self.product['products']
         if necklace_name in necklaces:
             raise Exception("This name has already used on another item. Please write another name")
         
         beads = self.product['beads']
-        product_price = 0
         
-        for item, piece in item_list.items():
-            unit_price = float(beads[item]['Unit_Price'])
-            item_price = unit_price * float(piece)
-            product_price += item_price
+        
+        # for item, piece in item_list.items():
+        #     unit_price = float(beads[item]['Unit_Price'])
+        #     item_price = unit_price * float(piece)
+        #     product_price += item_price
+        
         necklace = {'Item_Name': necklace_name,
-                    'Urunun_maliyeti': product_price,
-                    'Beads': item_list,
-                    'Satis_Fiyati': satis_fiyati}
+                    'Boncuk_Maliyeti': boncuk_maliyet,
+                    'Toplam_Maliyet': toplam_maliyet,
+                    'Kar': kazanc,
+                    'Satis_Fiyati': satis_fiyati,
+                    'Beads': item_list}
         
         self.product['products'][necklace_name] = necklace
         self.update_json()
