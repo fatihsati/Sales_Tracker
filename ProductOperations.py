@@ -46,7 +46,12 @@ class Product:
                 'Total_Price': total_price}
         self.product['beads'][bead_name] = info
         self.update_json()
-            
+    
+    def delete_bead(self, bead_name):
+        beads = self.product['beads']
+        del beads[bead_name]
+        self.update_json()
+    
     def add_new_necklace(self, item_list, necklace_name, satis_fiyati, boncuk_maliyet, toplam_maliyet, kazanc):
         # item_list = bean names: # of piece,
         necklaces = self.product['products']

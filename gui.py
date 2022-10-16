@@ -3,6 +3,8 @@ from tkinter import messagebox
 from tkinter.messagebox import showinfo
 from tkinter import *
 from tkinter.ttk import Treeview
+
+from transformers import TFRemBertLayer
 from ProductOperations import Product
 
 class app:
@@ -22,7 +24,7 @@ class app:
         Button(self.frame, text='Kolyeleri Göster', command=self.show_necklace).grid(row=2, column=1, sticky='w')
         self.tree = Treeview(self.bottom_frame)
         
-        
+
     def add_bead_page(self):
         self.new = Toplevel(self.frame)
         self.new.geometry("400x450")
@@ -170,6 +172,13 @@ class app:
         self.toplam_maliyet['text'] = f'Toplam Maliyet: {toplam_maliyet}'
         self.kazanc_label['text'] = f'Kazanç: {kazanc}'
 
+    def delete_beads(self):
+        for selected_item in self.tree.selection():
+            item = self.tree.item(selected_item)
+            itemname, _ = item['values']
+            self.items.delete_bead(itemname)
+            self.show_beads()
+            
     def show_beads(self):
         self.remove_tree_view()
         column_list = ["boncuk_adi", "birim_fiyat"]
@@ -177,13 +186,15 @@ class app:
         self.tree.heading('boncuk_adi', text='Boncuk Adı')
         self.tree.heading('birim_fiyat', text='Birim Fiyatı')
         self.tree.grid(row=0, column=0)
-        
+        self.delete_beads = Button(self.bottom_frame, text='Boncuk Sil', command=self.delete_beads)
+        self.delete_beads.grid(row=1, column=0)
         beads = self.items.product['beads']
         
         for item in beads.values():
             contact = (item['Item_Name'], item['Unit_Price'])
             self.tree.insert('', tk.END, values=contact)
-            
+        
+       
     def show_necklace(self):
         self.remove_tree_view()
         self.show_info_button = Button(self.bottom_frame, text='Ürün Detaylarını Gör', command=self.necklace_info)
@@ -213,6 +224,11 @@ class app:
             self.detaylar_tree.grid_remove()
         except:
             pass
+        try:
+            self.delete_beads.grid_remove()
+        except:
+            pass
+        
     def necklace_info(self):
         column_list = ['boncuk_adi', 'boncuk_adet']
         self.detaylar_tree = Treeview(self.bottom_frame, columns=column_list, show='headings') 
